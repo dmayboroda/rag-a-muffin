@@ -32,7 +32,7 @@ class Lifecycle(ABC):
             uploader (Uploader): The uploader instance that handles file uploads.
        """
        self.uploader = uploader
-       self.local_path = os.environ.get("LOCAL_PATH")
+       self.local_path = os.environ.get("LOCAL_FILES_PATH")
        self.task  = None
 
     @abstractmethod
@@ -50,7 +50,7 @@ class Lifecycle(ABC):
             OSError: If there is an issue creating the local directory.
         """
         os.makedirs(self.local_path, exist_ok=True)
-        self.task = asyncio.create_task(loop(file_queue, self.producer, self.uploader))
+        self.task = asyncio.create_task(loop(file_queue, self.uploader))
 
     @abstractmethod
     def on_destroy(self):

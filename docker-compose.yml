@@ -50,4 +50,3 @@ services:
       - RDS_DB_PORT=${RDS_DB_PORT}
     depends_on:
      - kafka
-     - zookeeper

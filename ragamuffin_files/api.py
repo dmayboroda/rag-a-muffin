@@ -1,7 +1,13 @@
 import os
+import sys
 import uuid
 import logging
 from typing import List
+
+abs_path = os.path.abspath(__file__)
+dir_name = os.path.dirname(abs_path)
+sys.path.append(os.path.dirname(dir_name))
+
 from ragamuffin_core.common import file_queue
 from ragamuffin_core.common import rds_helper
 

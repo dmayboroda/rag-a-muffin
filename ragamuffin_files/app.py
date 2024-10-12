@@ -13,7 +13,7 @@ from tenacity import retry, wait_fixed, stop_after_delay
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("upload")
 
-@retry(wait=wait_fixed(5), stop=stop_after_delay(60))
+@retry(wait=wait_fixed(10), stop=stop_after_delay(120))
 def create_kafka_producer():
     """
     Creates and returns a Kafka producer instance.

@@ -1,8 +1,8 @@
 import os
 import logging
 from kafka import KafkaProducer
+from ragamuffin_core.common import rds_helper
 from ragamuffin_files.uploader import Uploader
-from ragamuffin_core.aws_rds_helper import RDSHelper
 from ragamuffin_core.aws_s3_helper import AwsS3Helper
 
 logger = logging.getLogger(__name__)
@@ -14,21 +14,18 @@ class AWSUploader(Uploader):
     provides implementations for the `upload` and `save` methods.
     
     Attributes:
-        rds_helper (RDSHelper): Helper class used to interact with AWS RDS to store metadata about files.
         bucket (str): The S3 bucket name where files will be uploaded, fetched from the environment variable `AWS_BUCKET_NAME`.
         path (str): The base path in the S3 bucket where files will be stored, fetched from the environment variable `AWS_FILES_PATH`.
     """
 
-    def __init__(self, rds_helper: RDSHelper, producer: KafkaProducer):
+    def __init__(self, producer: KafkaProducer):
         """
         Initializes the AWSUploader with an RDS helper and a Kafka producer.
         
         Args:
-            rds_helper (RDSHelper): An instance of the RDSHelper used to interact with AWS RDS.
             producer (KafkaProducer): The Kafka producer used to send messages to Kafka after the upload process.
         """
         super().__init__(producer)
-        self.rds_helper = rds_helper
         self.bucket = os.environ.get("AWS_BUCKET_NAME")
         self.path = os.environ.get("AWS_FILES_PATH")
 
@@ -77,7 +74,7 @@ class AWSUploader(Uploader):
             file_id = message["file_id"]
             user_id = message["user_id"]
             path = message["path"]
-            saved = self.rds_helper.insert_record(file_id, user_id, path, "uploaded")
+            saved = rds_helper.insert_record(file_id, user_id, path, "uploaded")
             logger.info(f"Saved file: {saved}")
         except Exception as error:
             logger.error(f"Error: Could not save file\n{error}")

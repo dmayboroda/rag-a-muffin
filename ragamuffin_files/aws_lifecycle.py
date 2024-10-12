@@ -1,7 +1,7 @@
 import os
 from ragamuffin_core.common import rds_helper
 from ragamuffin_files.lifecycle import Lifecycle
-import ragamuffin_core.aws_s3_helper as AwsS3Helper
+from ragamuffin_core.aws_s3_helper import AwsS3Helper
 
 class AwsLifecycle(Lifecycle):
     """
