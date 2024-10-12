@@ -1,0 +1,6 @@
+PyYAML
+boto3
+pydantic
+nest_asyncio
+asyncio
+psycopg2-binary

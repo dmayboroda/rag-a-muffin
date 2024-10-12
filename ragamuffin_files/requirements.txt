@@ -1,0 +1,12 @@
+fastapi==0.111.0
+uvicorn[standard]
+PyYAML
+boto3
+pydantic
+nest_asyncio
+asyncio==3.4.3
+kafka-python>=2.0.2
+fastapi-cognito
+python-multipart
+tenacity
+psycopg2-binary
