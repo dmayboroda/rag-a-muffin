@@ -1,5 +1,5 @@
 import os
-from ragamuffin_core.common import rds_helper
+from ragamuffin_core.common import db_helper
 from ragamuffin_files.lifecycle import Lifecycle
 from ragamuffin_core.aws_s3_helper import AwsS3Helper
 
@@ -31,16 +31,16 @@ class AwsLifecycle(Lifecycle):
 
         Steps:
         - Calls the parent class's `on_create` method to handle basic setup.
-        - Connects to the RDS database using the `rds_helper`.
-        - Creates the necessary RDS tables using the `rds_helper`.
+        - Connects to the database using the `db_helper`.
+        - Creates the necessary tables using the `db_helper`.
         - Creates the required directory in the S3 bucket using `AwsS3Helper`.
 
         Raises:
             Exception: If there are errors connecting to RDS or creating the S3 directory, appropriate exceptions are logged.
         """
         super().on_create()
-        rds_helper.connect()
-        rds_helper.create_table()
+        db_helper.connect()
+        db_helper.create_table()
         AwsS3Helper.create_directory(self.bucket, self.s3_path)
 
     def on_destroy(self):
@@ -49,10 +49,10 @@ class AwsLifecycle(Lifecycle):
 
         Steps:
         - Calls the parent class's `on_destroy` method to handle basic cleanup.
-        - Disconnects from the RDS database using `rds_helper`.
+        - Disconnects from the database using `db_helper`.
 
         Raises:
             Exception: If there are errors disconnecting from RDS, appropriate exceptions are logged.
         """
         super().on_destroy()
-        rds_helper.disconnect()
+        db_helper.disconnect()

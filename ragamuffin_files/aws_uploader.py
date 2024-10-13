@@ -1,7 +1,7 @@
 import os
 import logging
 from kafka import KafkaProducer
-from ragamuffin_core.common import rds_helper
+from ragamuffin_core.common import db_helper
 from ragamuffin_files.uploader import Uploader
 from ragamuffin_core.aws_s3_helper import AwsS3Helper
 
@@ -74,7 +74,7 @@ class AWSUploader(Uploader):
             file_id = message["file_id"]
             user_id = message["user_id"]
             path = message["path"]
-            saved = rds_helper.insert_record(file_id, user_id, path, "uploaded")
+            saved = db_helper.insert_record(file_id, user_id, path, "uploaded")
             logger.info(f"Saved file: {saved}")
         except Exception as error:
             logger.error(f"Error: Could not save file\n{error}")

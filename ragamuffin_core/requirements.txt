@@ -4,3 +4,7 @@ pydantic
 nest_asyncio
 asyncio
 psycopg2-binary
+sqlalchemy
+pg8000
+cloud-sql-python-connector
+google-auth

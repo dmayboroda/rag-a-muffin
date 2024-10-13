@@ -24,3 +24,35 @@ rds:
 
   delete_files: |
     DELETE FROM postgres WHERE file_id = ANY(%s) AND user_id = %s RETURNING id, file_id, user_id, file_name, status;
+
+gsql:
+  create_table: |
+    CREATE TABLE IF NOT EXISTS postgres (
+      id SERIAL PRIMARY KEY,
+      file_id VARCHAR(255) UNIQUE NOT NULL,
+      user_id VARCHAR(255) NOT NULL,
+      file_name VARCHAR(255) NOT NULL,
+      status VARCHAR(50) NOT NULL
+    );
+
+  insert_record: |
+    INSERT INTO postgres (file_id, user_id, file_name, status) 
+    VALUES (:file_id, :user_id, :file_name, :status);
+  
+  select_inserted_record: |
+    SELECT id, file_id, user_id, file_name, status FROM postgres WHERE file_id=:file_id AND user_id=:user_id, AND file_name=:file_name, AND status=:status;
+
+  records_by_user_id: |
+    SELECT * FROM postgres WHERE user_id = :user_id;
+
+  update_files_status: |
+    UPDATE postgres SET status = :status WHERE file_id = ANY(:file_ids);
+
+  select_updated_records: |
+    SELECT id, file_id, user_id, file_name, status FROM postgres WHERE status = :status WHERE file_id = ANY(:file_ids);
+
+  files_status_by_user_id: |
+    SELECT file_name, status FROM postgres WHERE user_id = :user_id;
+
+  delete_files: |
+    DELETE FROM postgres WHERE file_id = ANY(:file_ids) AND user_id = :user_id;

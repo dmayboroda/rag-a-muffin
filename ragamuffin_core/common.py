@@ -2,6 +2,7 @@ import os
 import yaml
 from .async_queue import AsyncQueue
 from .aws_rds_helper import RDSHelper
+from .gcp_gsql_helper import GSQLHelper
 
 def load_config(config_file):
     """
@@ -19,7 +20,10 @@ Initialize the global variables for the application.
 """
 async_queue = AsyncQueue()
 file_queue = AsyncQueue()
-#AWS entities
+#AWS | GCP entities
 dir_path = os.path.dirname(__file__)
 config_path = os.path.join(dir_path, "config.yml")
-rds_helper = RDSHelper(load_config(config_path))
+if os.environ.get("CONTAINER_CONNECTION") == 'GCP':
+    db_helper = GSQLHelper(load_config(config_path))
+else:
+    db_helper = RDSHelper(load_config(config_path))

@@ -9,7 +9,7 @@ dir_name = os.path.dirname(abs_path)
 sys.path.append(os.path.dirname(dir_name))
 
 from ragamuffin_core.common import file_queue
-from ragamuffin_core.common import rds_helper
+from ragamuffin_core.common import db_helper
 
 from fastapi import (
     File,
@@ -54,7 +54,7 @@ async def get_files(user_id: str):
             detail="Empty user ID provided"
         )
 
-    return rds_helper.fetch_records_by_user_id(user_id)
+    return db_helper.fetch_records_by_user_id(user_id)
 
 @router.get(
     "/get_files_status/{user_id}",
@@ -77,7 +77,7 @@ async def get_files_status(user_id: str):
             detail="Empty user ID provided"
         )
 
-    return rds_helper.fetch_file_statuses_by_user_id(user_id)
+    return db_helper.fetch_file_statuses_by_user_id(user_id)
 
 @router.post(
     "/upload_files/", 
@@ -148,4 +148,4 @@ async def remove_file(file_ids: List[str], user_id: str):
             detail="Empty user ID provided"
         )
 
-    return rds_helper.delete_files(file_ids, user_id)
+    return db_helper.delete_files(file_ids, user_id)
