@@ -65,7 +65,7 @@ class AWSUploader(Uploader):
         Message Format:
             - file_id (str): A unique identifier for the file.
             - user_id (str): The ID of the user who owns the file.
-            - path (str): The path where the file is stored in S3.
+            - file_path (str): The path where the file is stored in S3.
 
         Raises:
             Exception: If saving the file metadata to RDS fails, the error is logged along with the file information.
@@ -73,9 +73,10 @@ class AWSUploader(Uploader):
         try:
             file_id = message["file_id"]
             user_id = message["user_id"]
-            path = message["path"]
+            path = message["file_path"]
             saved = rds_helper.insert_record(file_id, user_id, path, "uploaded")
             logger.info(f"Saved file: {saved}")
         except Exception as error:
             logger.error(f"Error: Could not save file\n{error}")
             logger.error(f"Failed to save file: {path}, with file_id: {file_id}")
+            

@@ -1,0 +1,16 @@
+
+fastapi==0.111.0
+uvicorn[standard]
+PyYAML
+boto3
+pydantic
+nest_asyncio
+asyncio==3.4.3
+openai==1.35.3
+asyncio==3.4.3
+neo4j==5.21.0
+aiokafka
+llama-index==0.10.50
+llama-index-core==0.10.50
+llama-index-embeddings-openai==0.1.10
+llama-parse==0.4.4

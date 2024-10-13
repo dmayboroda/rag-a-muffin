@@ -17,8 +17,6 @@ def load_config(config_file):
 """
 Initialize the global variables for the application.
 """
-async_queue = AsyncQueue()
-file_queue = AsyncQueue()
 #AWS entities
 dir_path = os.path.dirname(__file__)
 config_path = os.path.join(dir_path, "config.yml")

@@ -8,8 +8,8 @@ abs_path = os.path.abspath(__file__)
 dir_name = os.path.dirname(abs_path)
 sys.path.append(os.path.dirname(dir_name))
 
-from ragamuffin_core.common import file_queue
 from ragamuffin_core.common import rds_helper
+from ragamuffin_files.deps import file_queue
 
 from fastapi import (
     File,
@@ -100,15 +100,14 @@ async def upload_files(
     uploaded_files_info = []
 
     for file in files:
-
         if file.content_type not in ALLOWED_CONTENT_TYPES:
             logger.error(f"Invalid file type: {file.content_type} for file {file.filename}")
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Invalid file type: {file.filename}. Allowed types: PDF, DOC, Excel.",
             )
-            
-        file_path = os.path.join("uploads", file.filename)
+        local_folder = os.environ.get("LOCAL_FILES_PATH")
+        file_path = os.path.join(local_folder, file.filename)
         with open(file_path, "wb") as buffer:
             buffer.write(file.file.read())
         async_message = {
@@ -148,4 +147,4 @@ async def remove_file(file_ids: List[str], user_id: str):
             detail="Empty user ID provided"
         )
 
-    return rds_helper.delete_files(file_ids, user_id)
+    return rds_helper.delete_file(file_ids, user_id)

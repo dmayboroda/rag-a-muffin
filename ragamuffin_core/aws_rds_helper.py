@@ -77,6 +77,7 @@ class RDSHelper:
             logger.error(f"Error: Could not create table\n{error}")
 
     def insert_record(self, file_id, user_id, file_name, status):
+        logger.info(f"Inserting record: {file_id}, {user_id}, {file_name}, {status}")
         """
         Insert a record into the database.
 
@@ -92,15 +93,19 @@ class RDSHelper:
             insert_query = sql.SQL(self.rds_config['insert_record'])
             self.cursor.execute(insert_query, (file_id, user_id, file_name, status))
             record = self.cursor.fetchone()
-            self.connection.commit()
-            logger.info(f"Records inserted successfully, number of records: {len(record)}")
-            return json.dumps({
-                "id": record[0],
-                "file_id": record[1],
-                "user_id": record[2],
-                "file_name": record[3],
-                "status": record[4]
-            })
+            #self.connection.commit()
+            if record:
+                logger.info(f"Record inserted successfully: {record}")
+                return json.dumps({
+                    "id": record[0],
+                    "file_id": record[1],
+                    "user_id": record[2],
+                    "file_name": record[3],
+                    "status": record[4]
+                })
+            else:
+                logger.error("Error: No record returned after insertion.")
+                return json.dumps({"error": "No record returned after insertion."})
         except Exception as error:
             logger.error(f"Error: Could not insert record\n{error}")
             self.connection.rollback()

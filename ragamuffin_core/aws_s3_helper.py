@@ -420,3 +420,25 @@ class AwsS3Helper:
             finally:
                 # Close the S3 client explicitly after using it
                 s3.close()
+
+    @staticmethod
+    def download_file(bucket: str, path: str, local_folder: str):
+        """
+        Downloads a file from an S3 bucket to a local directory.
+
+        This method connects to an Amazon S3 bucket using the boto3 library, downloads the 
+        specified file, and saves it to the local filesystem in the folder specified by the 
+        'LOCAL_FILES_PATH' environment variable.
+
+        Parameters:
+        - bucket (str): The name of the S3 bucket from which the file will be downloaded.
+        - path (str): The S3 object key (file path in the S3 bucket) that specifies which file to download.
+
+        Returns:
+        - str: The full path to the file downloaded locally.
+        """
+        s3 = boto3.client("s3")
+        basename = os.path.basename(path)
+        local_path = os.path.join(local_folder, basename)
+        s3.download_file(bucket, path, local_path)
+        return local_path

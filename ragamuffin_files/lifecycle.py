@@ -3,9 +3,8 @@ import shutil
 import logging
 import asyncio
 from async_loop import loop
-from kafka import KafkaProducer
 from abc import ABC, abstractmethod
-from ragamuffin_core.common import file_queue
+from ragamuffin_files.deps import file_queue
 from ragamuffin_files.uploader import Uploader
 
 logger = logging.getLogger(__name__)
