@@ -1,26 +1,26 @@
 rds:
   create_table: |
-    CREATE TABLE IF NOT EXISTS rag (
+    CREATE TABLE IF NOT EXISTS postgres (
       id SERIAL PRIMARY KEY,
       file_id VARCHAR(255) UNIQUE NOT NULL,
       user_id VARCHAR(255) NOT NULL,
       file_name VARCHAR(255) NOT NULL,
-      status VARCHAR(50) NOT NULL,
+      status VARCHAR(50) NOT NULL
     );
 
   insert_record: |
-    INSERT INTO rag (file_id, user_id, file_name, status) 
+    INSERT INTO postgres (file_id, user_id, file_name, status) 
     VALUES (%s, %s, %s, %s, %s, %s) 
     RETURNING id, file_id, user_id, file_name, status;
   
   records_by_user_id: |
-    SELECT * FROM rag WHERE user_id = %s;
+    SELECT * FROM postgres WHERE user_id = %s;
 
   update_files_status: |
-    UPDATE rag SET status = %s WHERE file_id = ANY(%s) RETURNING id, file_id, user_id, file_name, status;
+    UPDATE postgres SET status = %s WHERE file_id = ANY(%s) RETURNING id, file_id, user_id, file_name, status;
 
   files_status_by_user_id: |
-    SELECT file_name, status FROM rag WHERE user_id = %s;
+    SELECT file_name, status FROM postgres WHERE user_id = %s;
 
   delete_files: |
-    DELETE FROM rag WHERE file_id = ANY(%s) AND user_id = %s RETURNING id, file_id, user_id, file_name, status;
+    DELETE FROM postgres WHERE file_id = ANY(%s) AND user_id = %s RETURNING id, file_id, user_id, file_name, status;

@@ -22,7 +22,7 @@ class RDSHelper:
         self.port = os.environ.get("RDS_DB_PORT")
         self.connection = None
         self.cursor = None
-        self.rds_config = config
+        self.rds_config = config['rds']
 
     def get_rds_endpoint(self):
         """
@@ -72,7 +72,7 @@ class RDSHelper:
             create_table_query = self.rds_config['create_table']
             self.cursor.execute(create_table_query)
             self.connection.commit()
-            logger.info("Table 'peakfiles' created successfully")
+            logger.info("Table created successfully")
         except Exception as error:
             logger.error(f"Error: Could not create table\n{error}")
 
@@ -183,7 +183,7 @@ class RDSHelper:
             logger.error(f"Error: Could not fetch file statuses\n{error}")
             return json.dumps({"error": str(error)})
         
-    def delete_files(self, file_ids, user_id):
+    def delete_file(self, file_ids, user_id):
         """
         Delete a file from the database.
 
